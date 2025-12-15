@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "FastAPI (uvicorn)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "main:app",
+                "--reload",
+                "--app-dir",
+                "backend/src"
+            ],
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        }
+    ]
+}
