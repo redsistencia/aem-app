@@ -9,8 +9,3 @@ app = FastAPI()
 def health_check():  # Función que se ejecuta cuando alguien visita /health
     # Devuelve un JSON indicando que todo está bien
     return {"status": "ok"}
-
-
-
-# para ejecutar y probar api poner el siguiente comando dentro del directorio:
-# uvicorn main:app --reload
