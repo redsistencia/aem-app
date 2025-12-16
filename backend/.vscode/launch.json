@@ -10,7 +10,7 @@
                 "main:app",
                 "--reload",
                 "--app-dir",
-                "src"
+                "src/api"
             ],
             "cwd": "${workspaceFolder}",
             "justMyCode": true
