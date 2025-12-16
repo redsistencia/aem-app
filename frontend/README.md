@@ -32,6 +32,8 @@ Node.js: >= 22.12 (22 o 24 recomendado)
 pnpm:    >= 10.24.0
 ```
 
+Dentro del directorio /frontend
+
 ## Instalar librerías
 
 ```sh
