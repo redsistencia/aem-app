@@ -7,7 +7,7 @@ Backend para la API y proyectos relacionados de Argentinos En Mallorca.
 
 Dentro de la carpeta Backend:
 
-- Crear el entorno virtual:
+- Crear el entorno virtual dentro de la carpeta Backend:
 
     python3 -m venv .venv
 
