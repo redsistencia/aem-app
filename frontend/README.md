@@ -1,38 +1,78 @@
-# sv
+# Argentinxs en Mallorca — Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Frontend del sitio web de **Argentinxs en Mallorca**, construido con **SvelteKit + TypeScript**.
 
-## Creating a project
+Este frontend se encarga únicamente de:
 
-If you're seeing this, you've probably already done this step. Congrats!
+- la interfaz de usuario
+- navegación
+- validaciones en cliente
+- consumo de la API backend
 
-```sh
-# create a new project in the current directory
-npx sv create
+**No maneja autenticación ni base de datos** (eso vive en el backend Python).
 
-# create a new project in my-app
-npx sv create my-app
+---
+
+## Stack
+
+- **SvelteKit**
+- **TypeScript**
+- **Vite**
+- **pnpm**
+- **ESLint + Prettier**
+- **Vitest** (unit + component testing)
+- **Playwright** (para component testing)
+
+---
+
+## 📋 Requisitos
+
+```txt
+Node.js: >= 22.12 (22 o 24 recomendado)
+pnpm:    >= 10.24.0
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Instalar librerías
 
 ```sh
-npm run dev
+pnpm install
 
-# or start the server and open the app in a new browser tab
+```
+
+## Levantar el servidor de desarrollo
+
+```sh
 npm run dev -- --open
 ```
 
 ## Building
 
-To create a production version of your app:
-
 ```sh
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+## Testing
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Instalar navegadores para Playwright (una sola vez)
+
+```sh
+pnpm dlx playwright install
+```
+
+```sh
+pnpm test
+```
+
+## Arquitectura
+
+src/
+├─ lib/
+│  ├─ components/     # Componentes reutilizables
+│  ├─ stores/         # Stores globales (theme, etc.)
+│  ├─ styles/         # Theme y estilos globales
+│  └─ utils/          # Helpers
+├─ routes/
+│  ├─ +layout.svelte  # Layout principal
+│  ├─ +page.svelte    # Home
+│  ├─ asociarse/      # Formulario de asociación
+│  └─ login/          # Acceso admin
