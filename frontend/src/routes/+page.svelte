@@ -14,8 +14,8 @@
 		</p>
 
 		<div class="flex gap-3 pt-4">
-			<LinkButton href="/asociarse" variant="outline">Asociarse</LinkButton>
-			<LinkButton href="/">Conocer más</LinkButton>
+			<LinkButton href="/asociarse">Asociarse</LinkButton>
+			<LinkButton href="/actividades" variant="outline">Ver actividades</LinkButton>
 		</div>
 	</div>
 </div>
