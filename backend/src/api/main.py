@@ -7,7 +7,12 @@ load_dotenv()
 
 # Importa la clase principal para crear la API
 from fastapi import FastAPI
-from src.api.config import settings
+from src.core.config import settings
+from src.db.base import Base
+from src.db.session import engine
+
+# Importar modelos para que SQLAlchemy los registre
+from src.db.models import subscription, activity, user
 
 # Crea la instancia de tu API
 app = FastAPI(
@@ -21,3 +26,8 @@ app = FastAPI(
 def health_check() -> Dict[str, str]:
     # Devuelve un JSON indicando que todo está bien
     return {"status": "ok"}
+
+@app.on_event("startup")
+def startup():
+    print("🚀 Startup event ejecutado")
+    Base.metadata.create_all(bind=engine)
