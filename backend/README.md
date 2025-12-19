@@ -66,8 +66,43 @@ Para agregar nuevas dependencias:
     pip install nombre-paquete
     pip freeze > requirements.txt
 
+## Databse
+
+Desde la consola:
+
+    sqlite3 aem.db
+    .tables
+    .schema subscriptions
+
 ## Notas
 
 - Las dependencias están fijadas para garantizar reproducibilidad
 - Se recomienda usar un entorno virtual por proyecto
 - FastAPI incluye documentación interactiva automáticamente en /docs
+
+### Estructura
+
+backend/
+├─ src/
+│  ├─ mypy.init
+│  ├─ api/
+│  │  ├─ deps.py
+│  │  └─ main.py
+│  ├─ core/
+│  │  └─ config.py
+│  ├─ db/
+│  │  ├─ base.py
+│  │  ├─ session.py
+│  │  └─ models/
+│  │     ├─ subscription.py
+│  │     ├─ activity.py
+│  │     └─ user.py
+│  └─ schemas/
+│     └─ subscription.py
+├─ aem.db
+├─ alembic/
+├─ alembic.ini
+├─ requirements.txt
+├─ .gitignore
+├─ .env.example
+└─ .env
