@@ -40,13 +40,13 @@ pnpm install
 ## Levantar el servidor de desarrollo
 
 ```sh
-npm run dev -- --open
+pnpm run dev -- --open
 ```
 
 ## Building
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 ## Testing

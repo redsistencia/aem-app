@@ -1,10 +1,5 @@
 <script lang="ts">
-	export type Column<T> = {
-		key: keyof T;
-		label: string;
-		class?: string;
-		render?: (value: any, row: T) => string;
-	};
+	import type { Column } from '$lib/types/data-table';
 
 	export let columns: Column<any>[] = [];
 	export let data: any[] = [];
