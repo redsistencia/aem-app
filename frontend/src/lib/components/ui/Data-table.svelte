@@ -5,8 +5,8 @@
 	export let data: any[] = [];
 </script>
 
-<div class="rounded-md border overflow-hidden">
-	<table class="w-full text-sm">
+<div class="relative w-full overflow-x-auto rounded-md border">
+	<table class="min-w-[640px] w-full text-sm whitespace-nowrap">
 		<thead class="bg-muted">
 			<tr>
 				{#each columns as column}
