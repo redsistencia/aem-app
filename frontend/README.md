@@ -30,6 +30,10 @@ pnpm:    >= 10.24.0
 
 Dentro del directorio /frontend
 
+## Copiar el archivo .env
+
+cp .env.example .env
+
 ## Instalar librerías
 
 ```sh
