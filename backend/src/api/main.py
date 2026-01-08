@@ -1,11 +1,17 @@
-# Importa la clase principal para crear la API
 from fastapi import FastAPI
+from endpoints import users, subscribers, activities
+from models.user import Base as UserBase
+from models.subscriber import Base as SubscriberBase
+from models.activity import Base as ActivityBase
+from db.session import engine
+from db.base import Base
 
-# Crea la instancia de tu API
-app = FastAPI()
 
-# Define un endpoint que responde a solicitudes GET en /health
-@app.get("/health", status_code=200)
-def health_check():  # Función que se ejecuta cuando alguien visita /health
-    # Devuelve un JSON indicando que todo está bien
-    return {"status": "ok"}
+# Crear tablas si no existen
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Sistema SQLAlchemy + Supabase")
+
+app.include_router(users.router)
+app.include_router(subscribers.router)
+app.include_router(activities.router)
