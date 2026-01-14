@@ -1,5 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, TIMESTAMP, ForeignKey, func
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, func
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional

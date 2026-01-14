@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, func, Enum
+from sqlalchemy.orm import Mapped, mapped_column
 from db.base import Base
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -17,7 +18,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(20), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
-    password = Column(String, nullable=False)
+    password: Mapped[str] = mapped_column(String, nullable=False)
     role = Column(Enum(UserRole), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now())
 

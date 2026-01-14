@@ -43,5 +43,21 @@ class SubscriberRead(BaseModel):
     active: bool
     created_at: datetime
 
+class SubscriberUpdate(BaseModel):
+    id: Optional[int] = None
+    name: Optional[str] = None
+    lastname: Optional[str] = None
+    email: Optional[EmailStr] = None
+    address: Optional[str] = None
+    nationality: Optional[str] = None
+    document_id: Optional[str] = None
+    phone: Optional[str] = None
+    privacy_policy: Optional[bool] = None
+    newsletter: Optional[bool] = None
+    active: Optional[bool] = None
+    termination_date: Optional[datetime] = None
+    created_by: Optional[int] = None
+    created_at: Optional[datetime] = None
+
     class Config:
         orm_mode = True
