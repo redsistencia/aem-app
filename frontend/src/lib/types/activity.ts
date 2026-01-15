@@ -3,7 +3,6 @@ export type Activity = {
 	date: string; // ISO string yyyy-mm-dd
 	title: string;
 	description: string;
-	imageUrl?: string;
-	activityUrl: string;
+	instagramUrl?: string;
 	sent: boolean;
 };

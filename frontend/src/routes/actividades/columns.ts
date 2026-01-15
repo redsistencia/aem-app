@@ -22,16 +22,10 @@ export const activityColumns: Column<Activity>[] = [
 		class: 'max-w-[450px] truncate'
 	},
 	{
-		key: 'imageUrl',
-		label: 'Imagen',
+		key: 'instagramUrl',
+		label: 'Instagram post',
 		render: (value: string) =>
 			value ? `<a href="${value}" target="_blank" class="text-primary underline">Ver</a>` : '—'
-	},
-	{
-		key: 'activityUrl',
-		label: 'URL',
-		render: (value: string) =>
-			`<a href="${value}" target="_blank" class="text-primary underline">Abrir</a>`
 	},
 	{
 		key: 'sent',
