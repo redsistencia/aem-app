@@ -5,10 +5,16 @@
 
 <nav class="border-b bg-background">
 	<div class="container mx-auto flex h-16 items-center justify-between px-4">
-		<a href="/" class="text-lg font-semibold">
-			Argentinxs en Mallorca
-		</a>
-
+        <a href="/" class="flex items-center gap-3">
+            <img
+                src="/logo.png"
+                alt="Redsistencia"
+                class="h-8 w-auto"
+            />
+            <span class="text-lg font-semibold tracking-tight">
+                Redsistencia
+            </span>
+        </a>
 		<div class="flex items-center gap-4">
 			<a
 				href="/asociarse"

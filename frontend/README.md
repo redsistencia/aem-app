@@ -41,6 +41,13 @@ pnpm install
 
 ```
 
+## Chequear inconsistencias de svelte
+
+```sh
+pnpm svelte-check
+
+```
+
 ## Levantar el servidor de desarrollo
 
 ```sh

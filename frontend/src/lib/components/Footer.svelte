@@ -1,7 +1,7 @@
 <footer class="border-t bg-muted/40">
 	<div class="container mx-auto px-4 py-8 space-y-4">
 		<p class="text-sm text-muted-foreground">
-			© 2026 Argentinxs en Mallorca
+			© 2026 Redsistencia baleares
 		</p>
 
 		<ul class="flex flex-wrap gap-4 text-sm">

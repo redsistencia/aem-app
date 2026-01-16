@@ -1,9 +1,17 @@
-<script lang="ts">
-	import type { Column } from '$lib/types/data-table';
+<script context="module" lang="ts">
+	export type Column<T> = {
+		key: keyof T;
+		label: string;
+		class?: string;
+		render?: (value: T[keyof T], row: T) => string;
+	};
+</script>
 
+<script lang="ts">
 	export let columns: Column<any>[] = [];
 	export let data: any[] = [];
 </script>
+
 
 <div class="relative w-full overflow-x-auto rounded-md border">
 	<table class="min-w-[640px] w-full text-sm whitespace-nowrap">

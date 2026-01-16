@@ -7,7 +7,6 @@
 <Button
 	variant="ghost"
 	size="icon"
-	aria-label="Cambiar tema"
 	on:click={toggleTheme}
 >
 	{#if $theme === 'dark'}

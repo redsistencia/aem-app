@@ -7,9 +7,7 @@ export const activities: Activity[] = [
 		title: 'Mateada comunitaria',
 		description:
 			'Encuentro abierto para compartir mates, charlas y fortalecer la comunidad argentina en Mallorca.',
-		imageUrl:
-			'https://instagram.fpmi3-1.fna.fbcdn.net/v/t51.82787-15/589259798_17923806975171264_6083534475097821517_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&cb=8438d1d6-0aee74db&ig_cache_key=Mzc3MjkxMDg4Mzg1NzgwMzgyMA%3D%3D.3-ccb7-5-cb8438d1d6-0aee74db&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjEwODB4MTA4MC5zZHIuQzMifQ%3D%3D&_nc_ohc=e9C_aOu2zQ8Q7kNvwHJaXLq&_nc_oc=AdllaR5Jf592GHcnrYg7v64klwjfY4y_7AeXxWeDQUAUqjsSOq351-L9Llr0zyT179E&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fpmi3-1.fna&_nc_gid=DWZxFhSjTzruPk5tCWX80A&oh=00_Afme76jny8dCaBmGzBVuMhrMnj7YakxAFG4vtRT7aBukqg&oe=6949C2C4',
-		activityUrl: 'https://www.instagram.com/p/DOHLCRajJTn/',
+		instagramUrl: 'https://www.instagram.com/p/DRcEnWJjKos/',
 		sent: true
 	},
 	{
@@ -18,7 +16,15 @@ export const activities: Activity[] = [
 		title: 'Encuentro por la memoria',
 		description:
 			'Somos la semilla transoceánica que sembraron las Madres y las Abuelas, y brotamos orgullosxs, sabiéndonos más que ellxs, y que aunque quieran cortar todas las flores, nunca, NUNCA, podrán detener la primavera.',
-		activityUrl: 'https://www.instagram.com/p/DHOB5ICsUPg/',
+		instagramUrl: 'https://www.instagram.com/p/DHOB5ICsUPg/',
+		sent: false
+	},
+	{
+		slug: 'roges-zurdos',
+		date: '2025-04-02',
+		title: 'Roges, zurdos, vagas i maleantes',
+		description:
+			'El viernes pasado, nos invitaron a participar en Roges, zurdos, vagas i maleantes. Un evento antifascista que contó con la participación de varios colectivos que resisten el avance de la ultraderecha y el fascismo en España y Argentina. Milei no solo siembra odio, racismo, homofobia y xenofobia, creando división entre les argentines, sino que, cuando termine su estafa, dejará un país endeudado y empobrecido , con alto desempleo y una industria destruida.¡pero nos levantaremos! Somos les herederes de las abuelas y madres de Plaza de Mayo, y de ellas aprendimos a luchar con amor y ternura, pero también con fuerza y convicción, sabiendo que estamos del lado correcto de la historia. ¡Fascismo NUNCA MÁS!',
 		sent: false
 	}
 ];
