@@ -12,7 +12,6 @@
 	export let data: any[] = [];
 </script>
 
-
 <div class="relative w-full overflow-x-auto rounded-md border">
 	<table class="min-w-[640px] w-full text-sm whitespace-nowrap">
 		<thead class="bg-muted">
@@ -45,7 +44,11 @@
 								{#if column.render}
 									{@html column.render(row[column.key], row)}
 								{:else}
-									{row[column.key]}
+									{#if typeof row[column.key] === 'boolean'}
+										{row[column.key] ? 'Sí' : 'No'}
+									{:else}
+										{row[column.key]}
+									{/if}
 								{/if}
 							</td>
 						{/each}

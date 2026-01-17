@@ -38,7 +38,7 @@
 
 			<div class="flex gap-3">
 				<Button variant="outline">
-					<a href="/actividades">
+					<a href="/admin/actividades">
 						Volver
 					</a>
 				</Button>

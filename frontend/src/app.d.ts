@@ -8,6 +8,14 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+    interface Window {
+        instgrm?: {
+            Embeds: {
+                process: () => void;
+            };
+        };
+    }
 }
 
 export {};
