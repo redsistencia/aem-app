@@ -34,5 +34,30 @@ export const activityColumns: Column<Activity>[] = [
 			value
 				? `<span class="text-green-600 font-medium">Sí</span>`
 				: `<span class="text-muted-foreground">No</span>`
+	},
+	{
+		key: 'slug',
+		label: 'Acciones',
+		render: (_, row: Activity) => {
+			return `
+			<div class="flex gap-2">
+				<button
+					class="inline-flex h-8 items-center rounded-md border px-3 text-xs hover:bg-muted"
+					data-action="edit"
+					data-slug="${row.slug}"
+				>
+					Editar
+				</button>
+
+				<button
+					class="inline-flex h-8 items-center rounded-md border border-red-200 px-3 text-xs text-red-600 hover:bg-red-50"
+					data-action="delete"
+					data-slug="${row.slug}"
+				>
+					Eliminar
+				</button>
+			</div>
+		`;
+		}
 	}
 ];
