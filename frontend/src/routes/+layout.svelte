@@ -3,7 +3,7 @@
 	import { queryClient } from '$lib/query/client';
 	import { theme } from '$lib/stores/theme';
 
-    import favicon from '$lib/assets/favicon.svg';
+    import favicon from '$lib/assets/favicon.ico';
 
     import '$lib/styles/theme.css';
     import '$lib/styles/tailwind.css';
@@ -13,6 +13,7 @@
 </script>
 
 <svelte:head>
+	<title>Redsistencia</title>
     <link rel="icon" href={favicon} />
 </svelte:head>
 
