@@ -58,21 +58,26 @@
 				Listado de actividades del colectivo.
 			</p>
 		</div>
-
+    
 		<!-- Delegación de eventos -->
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <div on:click={handleTableClick}>
+        <!--
+            svelte-ignore a11y_click_events_have_key_events
+            svelte-ignore a11y_no_static_element_interactions
+        -->
+        <div role="presentation" on:click={handleTableClick}>
             <DataTable columns={activityColumns} data={activities} />
         </div>
-
+        
         {#if showDeleteModal}
             <div class="fixed inset-0 z-50 flex items-center justify-center">
                 <!-- Overlay -->
-                <div
-                    class="absolute inset-0 bg-black/50"
+                <button
+                    type="button"
+                    class="absolute inset-0 bg-black/50 cursor-default"
                     on:click={cancelDelete}
-                />
-
+                    aria-label="Cerrar diálogo"
+                ></button>
+              
                 <!-- Modal -->
                 <div class="relative z-10 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
                     <h2 class="text-lg font-semibold">
