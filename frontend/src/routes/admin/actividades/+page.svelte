@@ -58,7 +58,7 @@
 				Listado de actividades del colectivo.
 			</p>
 		</div>
-
+    
 		<!-- Delegación de eventos -->
         <!--
             svelte-ignore a11y_click_events_have_key_events
@@ -77,7 +77,7 @@
                     on:click={cancelDelete}
                     aria-label="Cerrar diálogo"
                 ></button>
-
+              
                 <!-- Modal -->
                 <div class="relative z-10 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
                     <h2 class="text-lg font-semibold">
