@@ -18,7 +18,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(20), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String, nullable=False)
+    password: Mapped[str] = mapped_column()
+    active: Mapped[bool] = mapped_column(default=True)
     role = Column(Enum(UserRole), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now())
 

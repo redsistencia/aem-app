@@ -18,8 +18,8 @@ class Activity(Base):
 # Pydantic schemas
 class ActivityCreate(BaseModel):
     title: str
-    description: Optional[str]
-    location: Optional[str]
+    description: str
+    location: str | None = None
     activity_date: str
     created_by: int
 

@@ -12,9 +12,10 @@ DB_HOST = os.getenv("host")
 DB_PORT = os.getenv("port")
 DB_NAME = os.getenv("dbname")
 DB_PASSWORD = os.getenv("password")
+SSL_MODE = "?sslmode=require" if DB_PORT == "5432" else ""
 
 # Construimos la URL de conexión segura
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?sslmode=require"
+DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}{SSL_MODE}"
 
 # Creamos el engine
 engine = create_engine(DATABASE_URL)
