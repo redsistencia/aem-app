@@ -14,11 +14,17 @@ from src.db.session import engine
 # Importar modelos para que SQLAlchemy los registre
 from src.db.models import subscription, activity, user
 
+from endpoints import activities, subscribers, users
+
 # Crea la instancia de tu API
 app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
 )
+
+app.include_router(activities.router)
+app.include_router(subscribers.router)
+app.include_router(users.router)
 
 # Define un endpoint que responde a solicitudes GET en /health
 @app.get("/health", status_code=200)
@@ -30,4 +36,3 @@ def health_check() -> Dict[str, str]:
 @app.on_event("startup")
 def startup():
     print("🚀 Startup event ejecutado")
-    Base.metadata.create_all(bind=engine)
