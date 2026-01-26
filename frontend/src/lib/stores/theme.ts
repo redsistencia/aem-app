@@ -1,13 +1,21 @@
-import {
-    writable
-} from 'svelte/store';
+import { writable } from 'svelte/store';
 
-type Theme='light' | 'dark';
+export type Theme = 'light' | 'dark';
 
-export const theme=writable<Theme>('light');
+export const theme = writable<Theme>('light');
 
-theme.subscribe((value)=> {
-    if (typeof document !=='undefined') {
-        document.documentElement.dataset.theme=value;
-    }
-});
+if (typeof window !== 'undefined') {
+	const current = document.documentElement.getAttribute('data-theme') as Theme | null;
+	if (current) {
+		theme.set(current);
+	}
+
+	theme.subscribe((value) => {
+		document.documentElement.setAttribute('data-theme', value);
+		localStorage.setItem('theme', value);
+	});
+}
+
+export function toggleTheme() {
+	theme.update((t) => (t === 'dark' ? 'light' : 'dark'));
+}

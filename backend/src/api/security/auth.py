@@ -15,9 +15,9 @@ load_dotenv()
 # SECRET_KEY: clave secreta para firmar los tokens.
 # ALGORITHM: HS256 es un algoritmo estándar y seguro para JWT.
 # EXPIRATION: duración del token en minutos.
-_raw = os.getenv("SECRET_KEY")
+_raw = os.getenv("secret_key")
 if _raw is None:
-    raise RuntimeError("SECRET_KEY no definida")
+    raise RuntimeError("secret_key no definida")
 
 SECRET_KEY: str = _raw
 ALGORITHM = "HS256"

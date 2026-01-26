@@ -1,2 +1,6 @@
 src/.env
 src/venv/
+.venv
+.env
+
+__pycache__/

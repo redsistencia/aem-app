@@ -1,4 +1,4 @@
-Backend para la API y proyectos relacionados de Argentinos En Mallorca.
+# Backend para la API y proyectos relacionados de Argentinos En Mallorca
 
 ## Requisitos
 
@@ -16,6 +16,10 @@ Dentro de la carpeta Backend:
 
   source .venv/bin/activate
 
+- Desactivar el entorno:
+
+    deactivate
+
 - Actualizar herramientas base:
 
   pip install --upgrade pip setuptools wheel
@@ -24,16 +28,50 @@ Dentro de la carpeta Backend:
 
   pip install -r requirements.txt
 
+- Instalar nuevas librerías:
+
+    python -m pip install package-name
+
+- Al agregar librerías nuevas, exportarlas para que todo el equipo tenga el mismo setup:
+
+    python -m pip freeze > requirements.txt
+
+- Copiar el archivo .env:
+
+    cp .env.example .env
+
+## Levantar el docker
+
+En la carpeta /backend/docker:
+
+docker-compose up
+
+## Ejecutar migraciones
+
+En la carpeta /backend/src/api:
+
+alembic upgrade head
+
 ## Ejecutar la API
 
 En la carpeta /backend:
 
-    uvicorn main:app --reload --app-dir src/api
+    python -m uvicorn src.api.main:app --reload
+
+    o mejor, usando Run and debug del vscode
 
 La API estará disponible en:
 
-- http://127.0.0.1:8000
-- http://127.0.0.1:8000/docs
+- <http://127.0.0.1:8000>
+
+- <http://127.0.0.1:8000/docs>
+
+## Ejecutar mypy (type checking)
+
+- Tener activado el .venv
+- Tener instaladas todos los paquetes
+- Ejecutar:
+   mypy src/api
 
 ## Actualizar dependencias
 
@@ -41,6 +79,14 @@ Para agregar nuevas dependencias:
 
     pip install nombre-paquete
     pip freeze > requirements.txt
+
+## Databse
+
+Desde la consola:
+
+    sqlite3 aem.db
+    .tables
+    .schema subscriptions
 
 ## Notas
 
@@ -152,7 +198,7 @@ SQLAlchemy==2.0.25
     - ORM (Object Relational Mapper) para interactuar con bases de datos.
     - Permite trabajar con tablas como si fueran clases de Python.
 
-psycopg2==2.9.9
+psycopg2-binary==2.9.9
     - Driver para conectarse a bases de datos PostgreSQL.
     - SQLAlchemy lo utiliza internamente para comunicarse con Postgres.
 

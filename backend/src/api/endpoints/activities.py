@@ -12,11 +12,13 @@ from services.activities_service import (
 )
 
 # Inicializa el router de FastAPI para las rutas de actividades
-router = APIRouter()
-
+router = APIRouter(
+    prefix="/admin/activities",
+    tags=["Admin · Activities"],
+)
 
 # Endpoint para obtener todas las actividades
-@router.get("/admin/activities", response_model=list[ActivityRead])
+@router.get("/", response_model=list[ActivityRead])
 def get_all_activities(
     db: Session = Depends(get_db),                 # Sesión de base de datos
     user: User = Depends(require_role("admin", "editor")) # Solo admin y editor pueden acceder
@@ -25,7 +27,7 @@ def get_all_activities(
     return read_activities_service(db, activity_id=None)
 
 # Endpoint para obtener una actividad en concreto
-@router.get("/admin/activity/{activity_id}", response_model=ActivityRead)
+@router.get("/{activity_id}", response_model=ActivityRead)
 def get_activity_endpoint(
     activity_id: int,                              # ID de la actividad a obtener
     db: Session = Depends(get_db),                 # Sesión de base de datos
@@ -35,7 +37,7 @@ def get_activity_endpoint(
     return read_activities_service(db, activity_id)
 
 # Endpoint para crear una nueva actividad
-@router.post("/admin/activities/", response_model=ActivityRead)
+@router.post("/", response_model=ActivityRead)
 def create_activity_endpoint(
     activity_data: ActivityCreate,                 # Datos de la nueva actividad
     db: Session = Depends(get_db),                 # Sesión de base de datos
@@ -45,7 +47,7 @@ def create_activity_endpoint(
     return create_activity_service(db, activity_data)
 
 # Endpoint para actualizar parcialmente una actividad
-@router.patch("/admin/activities/{activity_id}", response_model=ActivityRead)
+@router.patch("/{activity_id}", response_model=ActivityRead)
 def update_activity_endpoint(
     activity_id: int,                              # ID de la actividad a actualizar
     activity_data: ActivityUpdate,                 # Datos a actualizar (parciales)
@@ -61,7 +63,7 @@ def update_activity_endpoint(
     return updated_activity
 
 # Endpoint para eliminar una actividad por su ID
-@router.delete("/admin/activities/{activity_id}")
+@router.delete("/{activity_id}", response_model=dict[str, str])
 def delete_activity_endpoint(
     activity_id: int,                              # ID de la actividad a eliminar
     db: Session = Depends(get_db),                 # Sesión de base de datos

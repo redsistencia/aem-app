@@ -1,46 +1,50 @@
-<footer class="footer">
-	<div class="container">
-		<p>© {new Date().getFullYear()} Argentinxs en Mallorca</p>
+<script lang="ts">
+	import { Instagram } from 'lucide-svelte';
+</script>
 
-		<ul class="links">
-			<li><a href="/privacidad">Privacidad</a></li>
-			<li><a href="/baja">Darse de baja</a></li>
-			<li><a href="mailto:redsistencia.baleares@gmail.com">Contacto</a></li>
+<footer class="border-t bg-muted/40">
+	<div class="container mx-auto px-4 py-8 space-y-4">
+		<p class="text-sm text-muted-foreground">
+			© 2026 Redsistencia baleares
+		</p>
+
+		<ul class="flex flex-wrap items-center gap-4 text-sm">
+			<li>
+				<a
+					href="/privacidad"
+					class="text-muted-foreground hover:text-foreground transition-colors"
+				>
+					Privacidad
+				</a>
+			</li>
+
+			<li>
+				<a
+					href="/baja"
+					class="text-muted-foreground hover:text-foreground transition-colors"
+				>
+					Darse de baja
+				</a>
+			</li>
+
+			<li class="flex items-center gap-3">
+				<a
+					href="mailto:redsistencia.baleares@gmail.com"
+					class="text-muted-foreground hover:text-foreground transition-colors"
+				>
+					Contacto
+				</a>
+
+				<a
+					href="https://www.instagram.com/redsistencia.baleares/"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Instagram de Redsistencia"
+					class="text-muted-foreground hover:text-foreground transition-colors"
+				>
+					<Instagram class="h-4 w-4" />
+				</a>
+			</li>
 		</ul>
 	</div>
 </footer>
-
-<style>
-	.footer {
-		background-color: var(--color-bg-muted);
-		border-top: 1px solid var(--color-border);
-		margin-top: var(--space-xl);
-	}
-
-	.container {
-		max-width: 1024px;
-		margin: 0 auto;
-		padding: var(--space-lg) var(--space-md);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-	}
-
-	p {
-		color: var(--color-text-muted);
-		font-size: 0.875rem;
-	}
-
-	.links {
-		display: flex;
-		gap: var(--space-md);
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.links a {
-		color: var(--color-text-muted);
-		font-size: 0.875rem;
-	}
-</style>

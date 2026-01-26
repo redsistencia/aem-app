@@ -7,10 +7,13 @@ from services.users_service import register_user_service, login_user_service
 from security.auth import create_access_token, require_role
 
 # Inicializa el router de FastAPI para las suscripciones
-router = APIRouter()
+router = APIRouter(
+    prefix="/admin/users",
+    tags=["Admin · Usuaries"],
+)
 
 # Endpoint para registrar un usuario administrador
-@router.post("/admin/register", response_model=UserRead)
+@router.get("/", response_model=list[UserRead])
 def register_user_endpoint(
     user_data: UserCreate,                  # Datos del usuario que llegan en el body (email, password, etc.)
     db: Session = Depends(get_db),          # Sesión de base de datos inyectada por FastAPI

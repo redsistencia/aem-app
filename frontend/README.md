@@ -1,15 +1,6 @@
 # Argentinxs en Mallorca — Frontend
 
-Frontend del sitio web de **Argentinxs en Mallorca**, construido con **SvelteKit + TypeScript**.
-
-Este frontend se encarga únicamente de:
-
-- la interfaz de usuario
-- navegación
-- validaciones en cliente
-- consumo de la API backend
-
-**No maneja autenticación ni base de datos** (eso vive en el backend Python).
+Frontend del sitio web de **Argentinxs en Mallorca**, SPA construido con **SvelteKit + TypeScript**.
 
 ---
 
@@ -22,6 +13,11 @@ Este frontend se encarga únicamente de:
 - **ESLint + Prettier**
 - **Vitest** (unit + component testing)
 - **Playwright** (para component testing)
+- **zod** (para validación de formularios)
+- **@tanstack/svelte-query** (para conectarse al backend)
+- **lucide-svelte** (para íconos)
+- **openapi-ts** (para documentación de la API)
+- **shadcn-svelte** + **tailwindcss** (para componentes diseñados)
 
 ---
 
@@ -34,6 +30,10 @@ pnpm:    >= 10.24.0
 
 Dentro del directorio /frontend
 
+## Copiar el archivo .env
+
+cp .env.example .env
+
 ## Instalar librerías
 
 ```sh
@@ -41,16 +41,23 @@ pnpm install
 
 ```
 
+## Chequear inconsistencias de svelte
+
+```sh
+pnpm svelte-check
+
+```
+
 ## Levantar el servidor de desarrollo
 
 ```sh
-npm run dev -- --open
+pnpm run dev -- --open
 ```
 
 ## Building
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 ## Testing
@@ -65,6 +72,15 @@ pnpm dlx playwright install
 pnpm test
 ```
 
+## Open API
+
+Generar open api
+
+```sh
+pnpm openapi-typescript <http://localhost:8000/openapi.json> \
+  --output src/lib/api/generated.ts
+```
+
 ## Arquitectura
 
 src/
@@ -73,6 +89,9 @@ src/
 │  ├─ stores/         # Stores globales (theme, etc.)
 │  ├─ styles/         # Theme y estilos globales
 │  └─ utils/          # Helpers
+│  ├─ api/            # fetchers
+│  ├─ query/          # svelte-query hooks
+│  ├─ schemas/        # zod schemas
 ├─ routes/
 │  ├─ +layout.svelte  # Layout principal
 │  ├─ +page.svelte    # Home

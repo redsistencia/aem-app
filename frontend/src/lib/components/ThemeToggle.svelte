@@ -1,36 +1,17 @@
 <script lang="ts">
-	import { theme } from '$lib/stores/theme';
-
-	$: isDark = $theme === 'dark';
-
-	function toggle() {
-		theme.update((t) => (t === 'light' ? 'dark' : 'light'));
-	}
+	import { Moon, Sun } from 'lucide-svelte';
+	import Button from '$lib/components/ui/Button.svelte';
+	import { theme, toggleTheme } from '$lib/stores/theme';
 </script>
 
-<button
-	on:click={toggle}
-	aria-label="Cambiar tema"
-	title="Cambiar tema"
+<Button
+	variant="ghost"
+	size="icon"
+	on:click={toggleTheme}
 >
-	{#if isDark}
-		☀️
+	{#if $theme === 'dark'}
+		<Sun class="h-5 w-5" />
 	{:else}
-		🌙
+		<Moon class="h-5 w-5" />
 	{/if}
-</button>
-
-<style>
-    button {
-        background: none;
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-sm);
-        padding: var(--space-xs) var(--space-sm);
-        cursor: pointer;
-        color: var(--color-text);
-    }
-
-    button:hover {
-        background-color: var(--color-bg-muted);
-    }
-</style>
+</Button>
