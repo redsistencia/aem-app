@@ -52,6 +52,12 @@ En la carpeta /backend/src/api:
 
 alembic upgrade head
 
+## Crear admin para swagger
+
+En la carpeta /backend/src/api:
+
+python scripts/create_admin.py
+
 ## Ejecutar la API
 
 En la carpeta /backend:

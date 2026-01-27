@@ -24,7 +24,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 # Ubicacion donde el cliente debe enviar el token, FastAPI lo extrae automáticamente.
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/admin/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/admin/auth/token")
 
 # Copia los datos que quieres meter en el token (email, rol…).
 # Añade una fecha de expiración.
