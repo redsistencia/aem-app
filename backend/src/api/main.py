@@ -10,6 +10,8 @@ from fastapi import FastAPI
 from src.core.config import settings
 from endpoints import activities, subscribers, users
 
+from endpoints import activities, subscribers, users
+
 # Crea la instancia de tu API
 app = FastAPI(
     title=settings.app_name,

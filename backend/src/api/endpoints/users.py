@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 # Inicializa el router de FastAPI para las suscripciones
 router = APIRouter(
-    prefix="/admin",
+    prefix="/admin/users",
     tags=["Admin · Usuaries"],
 )
 
