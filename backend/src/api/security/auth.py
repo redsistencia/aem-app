@@ -1,69 +1,50 @@
+from datetime import datetime, timedelta, timezone
+from typing import Any
+
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
-from datetime import datetime, timedelta, timezone
-from dotenv import load_dotenv
-from typing import Any
-import os
-from models.user import User
+from jose import JWTError, jwt
+from sqlalchemy.orm import Session
 
-# Este módulo gestiona la autenticación (JWT) y la autorización (roles) del backend.
+from src.api.models.user import User
+from src.api.repositories.users_repo import get_user_by_email
+from src.core.config import settings
+from src.db.session import get_db
 
-# Carga las variables de entorno
-load_dotenv()
-
-# SECRET_KEY: clave secreta para firmar los tokens.
-# ALGORITHM: HS256 es un algoritmo estándar y seguro para JWT.
-# EXPIRATION: duración del token en minutos.
-_raw = os.getenv("secret_key")
-if _raw is None:
-    raise RuntimeError("secret_key no definida")
-
-SECRET_KEY: str = _raw
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-# Ubicacion donde el cliente debe enviar el token, FastAPI lo extrae automáticamente.
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/admin/login")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/admin/users/token",
+    description="Ingresá tu email en username y tu contraseña. No se requieren client_id ni client_secret.",
+)
 
-# Copia los datos que quieres meter en el token (email, rol…).
-# Añade una fecha de expiración.
-# Codifica todo en un JWT firmado con tu SECRET_KEY.
-def create_access_token(data: dict[str, Any], expires_minutes: int = ACCESS_TOKEN_EXPIRE_MINUTES):
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(minutes=expires_minutes)
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# Lee el header Authorization, extrae el token, lo pasa a esta función.
-def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+def create_access_token(data: dict[str, Any], expires_minutes: int = ACCESS_TOKEN_EXPIRE_MINUTES) -> str:
+    payload = data.copy()
+    payload["exp"] = datetime.now(timezone.utc) + timedelta(minutes=expires_minutes)
+    return jwt.encode(payload, settings.secret_key, algorithm=ALGORITHM)
+
+
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
+    invalid = HTTPException(status_code=401, detail="Invalid token", headers={"WWW-Authenticate": "Bearer"})
     try:
-        # Si el token es inválido o está manipulado → error.
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-
-        # Extrae datos del usuario.
+        payload = jwt.decode(token, settings.secret_key, algorithms=[ALGORITHM])
         email = payload.get("user_email")
-        role = payload.get("role")
-
-        # Valida los datos, si falta algo, token invalido.
-        if email is None or role is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-
-        return User(email=email, role=role)
-
+        if not isinstance(email, str):
+            raise invalid
     except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise invalid
+    user = get_user_by_email(db, email)
+    if user is None or not user.active:
+        raise invalid
+    return user
 
-# Esta funcion permite definir roles permitidos en un endpoint.
-# Si el rol del usuario no está en la lista, lanza un error 403.
+
 def require_role(*allowed_roles: str):
     def wrapper(user: User = Depends(get_current_user)) -> User:
         if user.role not in allowed_roles:
-            raise HTTPException(
-                status_code=403,
-                detail="Not enough permissions"
-            )
+            raise HTTPException(status_code=403, detail="Not enough permissions")
         return user
 
     return wrapper
-    

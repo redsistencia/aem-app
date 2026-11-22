@@ -1,17 +1,12 @@
-from passlib.context import CryptContext
-
-# Configuración del contexto de encriptación usando bcrypt
-# "deprecated='auto'" permite migrar hashes antiguos si fuera necesario
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 
 def hash_password(password: str) -> str:
-    # Genera un hash seguro a partir de la contraseña en texto plano
-    # Este hash es el que se almacena en la base de datos
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("ascii")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # Verifica que la contraseña en texto plano coincida
-    # con el hash almacenado en la base de datos
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("ascii"))
+    except (ValueError, UnicodeError):
+        return False

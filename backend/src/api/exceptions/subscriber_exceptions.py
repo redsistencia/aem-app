@@ -1,4 +1,4 @@
-from exceptions.base import AppException
+from src.api.exceptions.base import AppException
 
 class SubscriberNotFound(AppException):
     def __init__(self):

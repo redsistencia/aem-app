@@ -68,6 +68,7 @@ pyroaring==1.0.3
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.1
 python-jose==3.5.0
+python-multipart==0.0.22
 pytz==2025.2
 PyYAML==6.0.3
 realtime==2.27.0

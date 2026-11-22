@@ -1,10 +1,10 @@
 from datetime import datetime
-from realtime import Any
+from typing import Any
 from sqlalchemy.orm import Session
 import re
-from exceptions.subscriber_exceptions import SubscriberExists, SubscriberNotFound, SubscriberErrorDateFormat, SubscriberEmailInvalid
-from models.subscriber import Subscriber, SubscriberCreate, SubscriberUpdate
-from repositories.subscribers_repo import create_subscriber, update_subscriber, get_subscriber, delete_subscriber
+from src.api.exceptions.subscriber_exceptions import SubscriberExists, SubscriberNotFound, SubscriberErrorDateFormat, SubscriberEmailInvalid
+from src.api.models.subscriber import Subscriber, SubscriberCreate
+from src.api.repositories.subscribers_repo import create_subscriber, update_subscriber, get_subscriber, delete_subscriber
 
 # Crear un nuevo suscriptor
 def create_subscriber_service(db: Session, subscriber: SubscriberCreate) -> Subscriber:
@@ -39,7 +39,7 @@ def get_subscriber_service(
 
 
 # Actualizar una actividad existente
-def update_subscriber_service(db: Session, subscriber_id: int, data: dict[str, Any]) -> SubscriberUpdate:
+def update_subscriber_service(db: Session, subscriber_id: int, data: dict[str, Any]) -> Subscriber:
     # Obtener la actividad existente
     subscriber = get_subscriber(db, subscriber_id)
     if not subscriber:
@@ -61,7 +61,7 @@ def update_subscriber_service(db: Session, subscriber_id: int, data: dict[str, A
 
 # Eliminar un suscriptor por ID o email
 def delete_subscriber_service(db: Session, entry: str | int) -> dict[str, str]:
-    subscriber = get_subscriber(db, entry)
+    subscriber = get_subscriber_service(db, entry)
     if not subscriber:
         raise SubscriberNotFound()
     # Eliminar el suscriptor

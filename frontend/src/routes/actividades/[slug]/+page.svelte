@@ -1,54 +1,20 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
-	import { activities } from '$lib/mocks/activities';
-	import Button from '$lib/components/ui/Button.svelte';
-
-	$: slug = $page.params.slug;
-	$: activity = activities.find((a) => a.slug === slug);
-
-	onMount(() => {
-		// Si existe el embed de Instagram, forzamos el render
-		if (window.instgrm) {
-			window.instgrm.Embeds.process();
-		}
-	});
+	import type { PageData } from './$types';
+	import LinkButton from '$lib/components/ui/Link-button.svelte';
+	export let data: PageData;
 </script>
 
-<div class="container mx-auto px-4 sm:px-6 lg:px-24 xl:px-24 py-24">
-	{#if activity}
-		<div class="flex flex-col gap-6 max-w-2xl">
-			<h1 class="text-2xl font-semibold">{activity.title}</h1>
-
-			<p class="text-sm text-muted-foreground">
-				{new Date(activity.date).toLocaleDateString()}
-			</p>
-            
-			{#if activity.instagramUrl}
-				<!-- Instagram Embed -->
-				<blockquote
-					class="instagram-media"
-					data-instgrm-permalink={activity.instagramUrl}
-					data-instgrm-version="14"
-					style="width:100%; margin:0 auto;"
-				></blockquote>
-			{/if}
-
-			<p>{activity.description}</p>
-
-			<div class="flex gap-3">
-				<Button variant="outline">
-					<a href="/actividades">
-						Volver
-					</a>
-				</Button>
-			</div>
-		</div>
-	{:else}
-		<p class="text-muted-foreground">Actividad no encontrada</p>
-	{/if}
+<svelte:head><title>{data.activity.title} · Redsistencia</title></svelte:head>
+<div class="container mx-auto px-4 py-24 sm:px-6 lg:px-24">
+	<article class="max-w-2xl space-y-6">
+		<h1 class="text-2xl font-semibold">{data.activity.title}</h1>
+		<p class="text-sm text-muted-foreground">{data.activity.date}</p>
+		{#if data.activity.image_url}<img
+				src={data.activity.image_url}
+				alt={data.activity.title}
+				class="w-full rounded-md"
+			/>{/if}
+		<p class="whitespace-pre-wrap">{data.activity.description}</p>
+		<LinkButton href="/actividades" variant="outline">Volver</LinkButton>
+	</article>
 </div>
-
-<svelte:head>
-	<script async src="https://www.instagram.com/embed.js"></script>
-</svelte:head>
