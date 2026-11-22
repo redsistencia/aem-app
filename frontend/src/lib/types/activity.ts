@@ -1,8 +1,10 @@
 export type Activity = {
+	id: number;
 	slug: string;
-	date: string; // ISO string yyyy-mm-dd
+	date: string;
 	title: string;
 	description: string;
+	image_url?: string | null;
 	instagramUrl?: string;
 	sent: boolean;
 };

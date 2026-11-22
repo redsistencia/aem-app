@@ -1,10 +1,3 @@
-from src.db.session import SessionLocal
-from sqlalchemy.orm import Session
+from src.db.session import get_db
 
-# Dependencias de auth
-def get_db() -> Session: # type: ignore
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+__all__ = ["get_db"]

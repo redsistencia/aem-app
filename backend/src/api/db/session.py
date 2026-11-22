@@ -1,32 +1,3 @@
-import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
+from src.db.session import DATABASE_URL, SessionLocal, engine, get_db
 
-# Carga las variables de entorno
-load_dotenv()
-
-# Obtenemos los datos de conexión
-DB_USER = os.getenv("user")
-DB_HOST = os.getenv("host")
-DB_PORT = os.getenv("port")
-DB_NAME = os.getenv("dbname")
-DB_PASSWORD = os.getenv("password")
-SSL_MODE = "?sslmode=require" if DB_PORT == "5432" else ""
-
-# Construimos la URL de conexión segura
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}{SSL_MODE}"
-
-# Creamos el engine
-engine = create_engine(DATABASE_URL)
-
-# Creamos la fábrica de sesiones
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Dependencia para FastAPI
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+__all__ = ["DATABASE_URL", "SessionLocal", "engine", "get_db"]

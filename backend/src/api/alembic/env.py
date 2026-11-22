@@ -4,12 +4,12 @@ from alembic import context
 
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # agrega la raíz del proyecto al path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))  # agrega la raíz del proyecto al path
 
 
-from db.base import Base                                      # Base declarative
-from db.session import engine, DATABASE_URL                               # engine
-from models import *                                            # importa todos los modelos
+from src.db.base import Base                                      # Base declarative
+from src.db.session import engine, DATABASE_URL                               # engine
+from src.api.models import *                                            # importa todos los modelos
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

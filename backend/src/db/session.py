@@ -1,38 +1,15 @@
-import os
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
+from collections.abc import Generator
 
-# Carga las variables de entorno
-load_dotenv()
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
-# Obtenemos los datos de conexión
-DB_USER = os.getenv("user")
-DB_HOST = os.getenv("host")
-DB_PORT = os.getenv("port")
-DB_NAME = os.getenv("dbname")
-DB_PASSWORD = os.getenv("password")
-SSL_MODE = "?sslmode=require" if DB_PORT == "5432" else ""
+from src.core.config import settings
 
-# Construimos la URL de conexión segura
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}{SSL_MODE}"
+DATABASE_URL = settings.sqlalchemy_url
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=5,
-    max_overflow=0,
-)
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine,
-)
-
-def get_db():
-    db = SessionLocal()
-    try:
+def get_db() -> Generator[Session, None, None]:
+    with SessionLocal() as db:
         yield db
-    finally:
-        db.close()

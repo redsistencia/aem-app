@@ -1,64 +1,58 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from models.user import User
-from models.subscriber import SubscriberCreate, SubscriberRead, SubscriberUpdate
-from services.subscribers_service import create_subscriber_service, update_subscriber_service, get_subscriber_service, delete_subscriber_service
-from db.session import get_db
-from security.auth import require_role
+from datetime import datetime, timezone
+from hmac import compare_digest
 
-# Inicializa el router de FastAPI para las suscripciones
-router = APIRouter(
-    prefix="/admin/subscribers",
-    tags=["Admin · Asociades"],
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from src.api.models.subscriber import SubscriberCreate, SubscriberRead, SubscriberUpdate, UnsubscribeRequest
+from src.api.security.auth import require_role
+from src.api.services.subscribers_service import (
+    create_subscriber_service, update_subscriber_service, get_subscriber_service, delete_subscriber_service,
 )
-# Endpoint para obtener todos los subscribers
-@router.get("/", response_model=list[SubscriberRead])
-def get_all_subscribers(
-    db: Session = Depends(get_db),
-    user: User = Depends(require_role("admin")) # Control de acceso por rol
-) -> list[SubscriberRead]:
-    # Devuelve la lista de todos los suscriptores
+from src.api.repositories.subscribers_repo import get_subscriber, update_subscriber
+from src.db.session import get_db
+
+router = APIRouter(prefix="/admin/subscribers", tags=["Admin · Asociades"])
+public_router = APIRouter(prefix="/subscribers", tags=["Asociades"])
+
+
+@router.get("/", response_model=list[SubscriberRead], dependencies=[Depends(require_role("admin"))])
+def get_all_subscribers(db: Session = Depends(get_db)):
     return get_subscriber_service(db, None)
 
-# Endpoint para obtener un subscriber por email o ID
-@router.get("/{entry}", response_model=SubscriberRead)
-def get_subscriber_endpoint(
-    entry: str,                     # ID o email del suscriptor
-    db: Session = Depends(get_db),   # Sesión de base de datos
-    user: User = Depends(require_role("admin")) # Control de acceso por rol
-) -> SubscriberRead:
+
+@router.get("/{entry}", response_model=SubscriberRead, dependencies=[Depends(require_role("admin"))])
+def get_subscriber_endpoint(entry: str, db: Session = Depends(get_db)):
     return get_subscriber_service(db, entry)
 
-# Endpoint para crear un nuevo suscriptor
-@router.post("/", response_model=SubscriberRead)
-def create_subscriber_endpoint(
-    subscriber: SubscriberCreate,   # Datos del suscriptor (email, nombre, etc.)
-    db: Session = Depends(get_db)    # Sesión de base de datos
-) -> SubscriberRead:
-    # Registra el suscriptor en la base de datos
+
+@public_router.post("/", response_model=SubscriberRead, status_code=201)
+@router.post("/", response_model=SubscriberRead, status_code=201)
+def create_subscriber_endpoint(subscriber: SubscriberCreate, db: Session = Depends(get_db)):
     return create_subscriber_service(db, subscriber)
 
-# Endpoint para actualizar parcialmente un subscriber
-@router.patch("/{subscriber_id}", response_model=SubscriberRead)
-def update_subscriber_endpoint(
-    subscriber_id: int,                            # ID del suscriptor a actualizar
-    subscriber_data: SubscriberUpdate,             # Datos a actualizar (parciales)
-    db: Session = Depends(get_db),                 # Sesión de base de datos
-    user: User = Depends(require_role("admin")) # Control de acceso por rol
-) -> SubscriberUpdate:
-    # Actualiza solo los campos enviados en la petición
-    updated_subscriber = update_subscriber_service(
-        db,
-        subscriber_id,
-        subscriber_data.model_dump(exclude_unset=True)     # Excluye campos no enviados
-    )
-    return updated_subscriber
 
-#Endpoint para eliminar un subscriber
-@router.delete("/{entry}", response_model=dict[str, str])
-def delete_subscriber_endpoint(
-    entry: str | int,                                    # ID o email del suscriptor a eliminar
-    db: Session = Depends(get_db),                       # Sesión de base de datos
-    user: User = Depends(require_role("admin"))          # Solo admin puede eliminar suscriptores
-) -> dict[str, str]:
+@public_router.post("/unsubscribe")
+def unsubscribe(data: UnsubscribeRequest, db: Session = Depends(get_db)):
+    subscriber = get_subscriber(db, data.email)
+    if subscriber is None or not subscriber.document_id or not compare_digest(
+        subscriber.document_id.strip().casefold().encode(), data.document_id.casefold().encode()
+    ):
+        raise HTTPException(status_code=400, detail="No se pudieron verificar los datos de la baja")
+    if subscriber.active or subscriber.newsletter:
+        update_subscriber(db, subscriber, {
+            "active": False,
+            "newsletter": False,
+            "termination_date": datetime.now(timezone.utc),
+        })
+    return {"success": True}
+
+
+@router.patch("/{subscriber_id}", response_model=SubscriberRead, dependencies=[Depends(require_role("admin"))])
+def update_subscriber_endpoint(subscriber_id: int, subscriber_data: SubscriberUpdate, db: Session = Depends(get_db)):
+    return update_subscriber_service(db, subscriber_id, subscriber_data.model_dump(exclude_unset=True))
+
+
+@router.delete("/{entry}", dependencies=[Depends(require_role("admin"))])
+def delete_subscriber_endpoint(entry: str, db: Session = Depends(get_db)):
     return delete_subscriber_service(db, entry)

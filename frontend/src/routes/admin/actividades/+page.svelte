@@ -1,111 +1,88 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import DataTable from '$lib/components/ui/Data-table.svelte';
-
-	import { activities } from '$lib/mocks/activities';
-	import { activityColumns } from './columns';
+	import { resolve } from '$app/paths';
+	import { onMount } from 'svelte';
+	import { api, errorMessage } from '$lib/api/client';
+	import LinkButton from '$lib/components/ui/Link-button.svelte';
+	import Button from '$lib/components/ui/Button.svelte';
 	import type { Activity } from '$lib/types/activity';
 
-	function handleEdit(slug: string) {
-		goto(`/admin/actividades/${slug}/edit`);
-	}
-
-	let showDeleteModal = false;
-	let activityToDelete: string | null = null;
-
-	function requestDelete(slug: string) {
-		activityToDelete = slug;
-		showDeleteModal = true;
-	}
-
-	function cancelDelete() {
-		showDeleteModal = false;
-		activityToDelete = null;
-	}
-
-	function confirmDelete() {
-		if (!activityToDelete) return;
-
-		console.log('Eliminar actividad:', activityToDelete);
-		// luego:
-		// await fetch(`/admin/actividades/${activityToDelete}`, { method: 'DELETE' });
-
-		cancelDelete();
-	}
-
-	function handleTableClick(event: MouseEvent) {
-		const target = event.target as HTMLElement;
-		const action = target.getAttribute('data-action');
-		const slug = target.getAttribute('data-slug');
-
-		if (!action || !slug) return;
-
-		if (action === 'edit') {
-			handleEdit(slug);
+	let activities: Activity[] = [];
+	let loading = true;
+	let error = '';
+	let pending = false;
+	let activityToDelete: Activity | null = null;
+	onMount(async () => {
+		try {
+			activities = await api<Activity[]>('/admin/activities/', {}, true);
+		} catch (cause) {
+			error = errorMessage(cause);
+		} finally {
+			loading = false;
 		}
+	});
 
-		if (action === 'delete') {
-			requestDelete(slug);
+	async function confirmDelete() {
+		if (!activityToDelete || pending) return;
+		pending = true;
+		error = '';
+		const id = activityToDelete.id;
+		try {
+			await api(`/admin/activities/${id}`, { method: 'DELETE' }, true);
+			activities = activities.filter((activity) => activity.id !== id);
+			activityToDelete = null;
+		} catch (cause) {
+			error = errorMessage(cause);
+		} finally {
+			pending = false;
 		}
 	}
 </script>
 
-<div class="container mx-auto px-4 sm:px-6 lg:px-24 xl:px-24 py-24">
-	<div class="flex flex-col gap-6">
-		<div>
-			<h1 class="text-2xl font-semibold">Actividades</h1>
-			<p class="text-muted-foreground">
-				Listado de actividades del colectivo.
-			</p>
+<div class="container mx-auto space-y-6 px-4 py-24 sm:px-6 lg:px-24">
+	<h1 class="text-2xl font-semibold">Actividades</h1>
+	<LinkButton href="/admin/actividades/nueva">Nueva actividad</LinkButton>
+	{#if error}<p role="alert">{error}</p>{/if}
+	{#if loading}<p>Cargando…</p>
+	{:else}
+		<div class="overflow-x-auto rounded-md border">
+			<table class="w-full text-left text-sm">
+				<thead
+					><tr
+						><th class="p-4">Fecha</th><th>Título</th><th>Newsletter enviado</th><th>Acciones</th
+						></tr
+					></thead
+				>
+				<tbody>
+					{#each activities as activity (activity.id)}
+						<tr class="border-t">
+							<td class="p-4">{activity.date}</td>
+							<td
+								><a href={resolve('/actividades/[slug]', { slug: activity.slug })}
+									>{activity.title}</a
+								></td
+							>
+							<td>{activity.sent ? 'Sí' : 'No'}</td>
+							<td class="flex gap-3 p-4">
+								<LinkButton href={`/admin/actividades/${activity.slug}`} variant="outline" size="sm"
+									>Editar</LinkButton
+								>
+								<Button variant="outline" size="sm" on:click={() => (activityToDelete = activity)}
+									>Eliminar</Button
+								>
+							</td>
+						</tr>
+					{:else}<tr><td colspan="4" class="p-4">Sin actividades</td></tr>{/each}
+				</tbody>
+			</table>
 		</div>
-    
-		<!-- Delegación de eventos -->
-        <!--
-            svelte-ignore a11y_click_events_have_key_events
-            svelte-ignore a11y_no_static_element_interactions
-        -->
-        <div role="presentation" on:click={handleTableClick}>
-            <DataTable columns={activityColumns} data={activities} />
-        </div>
-        
-        {#if showDeleteModal}
-            <div class="fixed inset-0 z-50 flex items-center justify-center">
-                <!-- Overlay -->
-                <button
-                    type="button"
-                    class="absolute inset-0 bg-black/50 cursor-default"
-                    on:click={cancelDelete}
-                    aria-label="Cerrar diálogo"
-                ></button>
-              
-                <!-- Modal -->
-                <div class="relative z-10 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
-                    <h2 class="text-lg font-semibold">
-                        Eliminar actividad
-                    </h2>
-
-                    <p class="mt-2 text-sm text-muted-foreground">
-                        ¿Seguro que querés eliminar esta actividad?
-                        Esta acción no se puede deshacer.
-                    </p>
-
-                    <div class="mt-6 flex justify-end gap-3">
-                        <button
-                            class="inline-flex h-9 items-center rounded-md border px-4 text-sm hover:bg-muted"
-                            on:click={cancelDelete}
-                        >
-                            Cancelar
-                        </button>
-
-                        <button
-                            class="inline-flex h-9 items-center rounded-md bg-red-600 px-4 text-sm text-white hover:bg-red-700"
-                            on:click={confirmDelete}
-                        >
-                            Eliminar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        {/if}
-	</div>
+	{/if}
+	{#if activityToDelete}
+		<section class="space-y-4 rounded-md border p-6" aria-label="Confirmar eliminación">
+			<p>¿Querés eliminar «{activityToDelete.title}»? Esta acción no se puede deshacer.</p>
+			<Button disabled={pending} on:click={confirmDelete}>Eliminar</Button>
+			<Button variant="outline" disabled={pending} on:click={() => (activityToDelete = null)}
+				>Cancelar</Button
+			>
+		</section>
+	{/if}
 </div>

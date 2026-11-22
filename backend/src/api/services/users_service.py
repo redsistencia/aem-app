@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from models.user import User, UserCreate, UserLogin
-from exceptions.user_exceptions import UserNotFound, InvalidUserCredentials, UserExists
-from repositories.users_repo import get_user_by_email, create_user
-from security.hash import verify_password
+from src.api.models.user import User, UserCreate, UserLogin
+from src.api.exceptions.user_exceptions import InvalidUserCredentials, UserExists
+from src.api.repositories.users_repo import get_user_by_email, create_user
+from src.api.security.hash import verify_password
 
 def register_user_service(db: Session, user_data: UserCreate) -> User:
     # Buscar si ya existe un usuario con el mismo email
@@ -27,8 +27,8 @@ def login_user_service(db: Session, login_data: UserLogin) -> User:
     user = get_user_by_email(db, login_data.email)
 
     # Error si el usuario no existe
-    if not user:
-        raise UserNotFound()
+    if not user or not user.active:
+        raise InvalidUserCredentials()
 
     # Verificar que la contraseña sea correcta
     if not verify_password(login_data.password, user.password):

@@ -2,6 +2,7 @@ import type { Activity } from '$lib/types/activity';
 
 export const activities: Activity[] = [
 	{
+		id: 1,
 		slug: 'mateada-comunitaria',
 		date: '2025-03-10',
 		title: 'Mateada comunitaria',
@@ -11,6 +12,7 @@ export const activities: Activity[] = [
 		sent: true
 	},
 	{
+		id: 2,
 		slug: 'encuentro-memoria',
 		date: '2025-04-02',
 		title: 'Encuentro por la memoria',
@@ -20,6 +22,7 @@ export const activities: Activity[] = [
 		sent: false
 	},
 	{
+		id: 3,
 		slug: 'roges-zurdos',
 		date: '2025-04-02',
 		title: 'Roges, zurdos, vagas i maleantes',

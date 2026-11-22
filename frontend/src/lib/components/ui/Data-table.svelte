@@ -7,19 +7,17 @@
 	};
 </script>
 
-<script lang="ts">
-	export let columns: Column<any>[] = [];
-	export let data: any[] = [];
+<script lang="ts" generics="T extends { id: string | number }">
+	export let columns: Column<T>[] = [];
+	export let data: T[] = [];
 </script>
 
 <div class="relative w-full overflow-x-auto rounded-md border">
 	<table class="min-w-[640px] w-full text-sm whitespace-nowrap">
 		<thead class="bg-muted">
 			<tr>
-				{#each columns as column}
-					<th
-						class="px-4 py-3 text-left font-medium text-muted-foreground {column.class}"
-					>
+				{#each columns as column (column.key)}
+					<th class="px-4 py-3 text-left font-medium text-muted-foreground {column.class}">
 						{column.label}
 					</th>
 				{/each}
@@ -29,26 +27,21 @@
 		<tbody>
 			{#if data.length === 0}
 				<tr>
-					<td
-						colspan={columns.length}
-						class="px-4 py-8 text-center text-muted-foreground"
-					>
+					<td colspan={columns.length} class="px-4 py-8 text-center text-muted-foreground">
 						Sin resultados
 					</td>
 				</tr>
 			{:else}
-				{#each data as row}
+				{#each data as row (row.id)}
 					<tr class="border-t hover:bg-muted/50 transition-colors">
-						{#each columns as column}
+						{#each columns as column (column.key)}
 							<td class="px-4 py-3 {column.class}">
 								{#if column.render}
-									{@html column.render(row[column.key], row)}
+									{column.render(row[column.key], row)}
+								{:else if typeof row[column.key] === 'boolean'}
+									{row[column.key] ? 'Sí' : 'No'}
 								{:else}
-									{#if typeof row[column.key] === 'boolean'}
-										{row[column.key] ? 'Sí' : 'No'}
-									{:else}
-										{row[column.key]}
-									{/if}
+									{row[column.key]}
 								{/if}
 							</td>
 						{/each}
